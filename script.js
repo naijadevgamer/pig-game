@@ -35,30 +35,62 @@ btnRoll.addEventListener('click', function () {
   if (dice !== 1) {
     if (player0El.classList.contains('player--active')) {
       currentScore += dice;
-      total0 += dice;
-      score0El.textContent = currentScore;
-      current0El.textContent = total0;
+      current0El.textContent = currentScore;
     } else if (player1El.classList.contains('player--active')) {
       currentScore += dice;
-      total1 += dice;
-      score1El.textContent = currentScore;
-      current1El.textContent = total1;
+      current1El.textContent = currentScore;
     }
   } else {
     // switch player
     currentScore = 0;
-    score0El.textContent = currentScore;
-    score1El.textContent = currentScore;
-    for (let i = 0; i < players.length; i++) {
-      const element = players[i];
-      if (element.classList.contains('player--active')) {
-        element.classList.remove('player--active');
-      } else {
-        element.classList.add('player--active');
-      }
-    }
+    switchPlayer(currentScore); // call switch player function
   }
 });
 
-// Reset game funtionality
-// btnNew.addEventListener('click', function () {});
+// if (total0 >= 100) {
+//   element.classList.add('player--winner');
+//   btnRoll.removeEventListener()
+
+// } else if (total1 >= 100) {
+//   element.classList.add('player--winner');
+// }
+
+// Hold game funtionality
+btnHold.addEventListener('click', function () {
+  if (player0El.classList.contains('player--active')) {
+    total0 += currentScore;
+    score0El.textContent = total0;
+  } else if (player1El.classList.contains('player--active')) {
+    total1 += currentScore;
+    score1El.textContent = total1;
+  }
+  currentScore = 0;
+  switchPlayer(currentScore); // call switch player function
+});
+
+// New game funtionality
+btnNew.addEventListener('click', newGame);
+
+// New game function declaration
+function newGame() {
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  diceEl.classList.add('hidden');
+  currentScore = 0;
+  total0 = 0;
+  total1 = 0;
+}
+
+// switch player function declaration
+function switchPlayer(currentScore) {
+  current0El.textContent = currentScore;
+  current1El.textContent = currentScore;
+  for (let i = 0; i < players.length; i++) {
+    const element = players[i];
+    if (element.classList.contains('player--active')) {
+      element.classList.remove('player--active');
+    } else {
+      element.classList.add('player--active');
+    }
+  }
+}
