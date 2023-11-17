@@ -17,18 +17,64 @@ const btnHold = document.querySelector('.btn--hold');
 score0El.textContent = 0;
 score1El.textContent = 0;
 diceEl.classList.add('hidden');
-
 let currentScore = 0;
 let total0 = 0;
 let total1 = 0;
 
 // Rolling dice functionality
-btnRoll.addEventListener('click', function () {
-  // Generate a random dice roll
-  const dice = Math.floor(Math.random() * 6 + 1);
+btnRoll.addEventListener('click', rollDice);
 
-  // Display dice
-  diceEl.src = `img/dice-${dice}.png`;
+// New game funtionality
+btnNew.addEventListener('click', newGame);
+
+// Hold game funtionality
+btnHold.addEventListener('click', function () {
+  if (player0El.classList.contains('player--active')) {
+    total0 += currentScore;
+    score0El.textContent = total0;
+    currentScore = 0; // reset current score
+    switchPlayer(currentScore); // switch player
+  } else if (player1El.classList.contains('player--active')) {
+    total1 += currentScore;
+    score1El.textContent = total1;
+    currentScore = 0; // reset current score
+    switchPlayer(currentScore); // switch player
+  }
+  // Winner funtionality
+  if (total0 >= 10) {
+    player0El.classList.add('player--winner');
+    btnRoll.removeEventListener('click', rollDice);
+    player0El.classList.remove('player--active');
+    player1El.classList.remove('player--active');
+  } else if (total1 >= 10) {
+    player1El.classList.add('player--winner');
+    btnRoll.removeEventListener('click', rollDice);
+    player0El.classList.remove('player--active');
+    player1El.classList.remove('player--active');
+  }
+});
+
+// New game function declaration
+function newGame() {
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  current0El.textContent = 0;
+  current1El.textContent = 0;
+  diceEl.classList.add('hidden');
+  player0El.classList.add('player--active');
+  player0El.classList.remove('player--winner');
+  player0El.classList.remove('player--winner');
+  currentScore = 0;
+  total0 = 0;
+  total1 = 0;
+  btnRoll.addEventListener('click', rollDice);
+}
+
+// Rolling dice function declaration
+function rollDice() {
+  const dice = Math.floor(Math.random() * 6 + 1); // Generate a random dice roll
+
+  diceEl.src = `img/dice-${dice}.png`; // Display dice
   diceEl.classList.remove('hidden');
 
   // check for rolled 1. if true, switch to next player
@@ -41,44 +87,9 @@ btnRoll.addEventListener('click', function () {
       current1El.textContent = currentScore;
     }
   } else {
-    // switch player
-    currentScore = 0;
-    switchPlayer(currentScore); // call switch player function
+    currentScore = 0; // reset current score
+    switchPlayer(currentScore); // switch player
   }
-});
-
-// if (total0 >= 100) {
-//   element.classList.add('player--winner');
-//   btnRoll.removeEventListener()
-
-// } else if (total1 >= 100) {
-//   element.classList.add('player--winner');
-// }
-
-// Hold game funtionality
-btnHold.addEventListener('click', function () {
-  if (player0El.classList.contains('player--active')) {
-    total0 += currentScore;
-    score0El.textContent = total0;
-  } else if (player1El.classList.contains('player--active')) {
-    total1 += currentScore;
-    score1El.textContent = total1;
-  }
-  currentScore = 0;
-  switchPlayer(currentScore); // call switch player function
-});
-
-// New game funtionality
-btnNew.addEventListener('click', newGame);
-
-// New game function declaration
-function newGame() {
-  score0El.textContent = 0;
-  score1El.textContent = 0;
-  diceEl.classList.add('hidden');
-  currentScore = 0;
-  total0 = 0;
-  total1 = 0;
 }
 
 // switch player function declaration
